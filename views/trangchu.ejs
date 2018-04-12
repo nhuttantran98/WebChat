@@ -4,37 +4,74 @@
     <title>Demo socket</title>
     <script src="jquery.js"></script>
     <script src="socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        function toggle(button) {
+            if (button.value == "OFF") {
+                button.value = "ON";
+            } else {
+                button.value = "OFF";
+            }
+        }
+    </script>
     <script>
-        var socket = io("http://localhost:8000");
-        socket.on("serversendmau",function(data){
-            $("body").attr("bgColor",data);
+        var socket = io("http://192.168.56.1:1000");
+        socket.on("serversendmau", function (data) {
+            $("body").attr("bgColor", data);
         })
-        
+        socket.on("serversendbutton",function(data){
+            if(data=="OFF"){
+                $("body").attr("bgColor","grey")
+            }
+            else{
+                $("body").attr("bgColor","white")
+            }
+        })
         $(document).ready(function () {
-           $("#do").click(function(){
-               socket.emit("clientsendmau","red")
-           });
-           $("#xanh").click(function(){
-               socket.emit("clientsendmau","blue")
-           });
-           $("#vang").click(function(){
-               socket.emit("clientsendmau","yellow")
-           });
+            $("#do").click(function () {
+                socket.emit("clientsendmau", "red");
+            });
+            $("#xanh").click(function () {
+                socket.emit("clientsendmau", "blue")
+            });
+            $("#vang").click(function () {
+                socket.emit("clientsendmau", "yellow")
+            });
+            $("#btn").click(function(){
+                toggle(this);
+                socket.emit("buttonsenddata",this.value)
+            });
 
         });
     </script>
     <style>
-    #do, #xanh, #vang{width:300px;height: 70px}
-    #do{background-color: red}
-    #xanh{background-color: blue}
-    #vang{background-color: yellow}
+        #do,
+        #xanh,
+        #vang {
+            width: 300px;
+            height: 70px
+        }
+
+        #do {
+            background-color: red
+        }
+
+        #xanh {
+            background-color: blue
+        }
+
+        #vang {
+            background-color: yellow
+        }
     </style>
 </head>
 
 <body bgColor="pink">
-    <div id="do"></div>
+    <div id="do" ></div>
     <div id="xanh"></div>
     <div id="vang"></div>
+    <form action="" >
+        <input id="btn" type="button"  value="ON" style="color:blue">
+    </form>
 </body>
 
 </html>
